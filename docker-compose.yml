@@ -1,0 +1,33 @@
+services:
+  database:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=dev
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=minirutter
+    container_name: postgres
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    networks:
+      - backend
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: minirutter
+    ports:
+      - '${PORT}:${PORT}'
+    depends_on:
+      - database
+    volumes:
+      - ./src:/app/src
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
