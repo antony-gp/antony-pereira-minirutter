@@ -1,4 +1,14 @@
+import { OrderProduct } from 'src/order-product/entities/order-product.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+
+@Entity()
 export class Order {
-  id: string; // A unique ID for this order
-  platform_id: string; // The Shopify ID of the order
+  @PrimaryGeneratedColumn({ type: 'bigint' })
+  id: number;
+
+  @Column()
+  platform_id: string;
+
+  @OneToMany(() => OrderProduct, (orderProduct) => orderProduct.order)
+  line_items: OrderProduct[];
 }
